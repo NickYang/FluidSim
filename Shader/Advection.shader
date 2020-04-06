@@ -4,8 +4,6 @@
 	{
 		_VelocityTex("Velocity Tex", 2D) = "black" {}
 		_PhysicTex("Physic Tex", 2D) = "black" {}
-		_Dissipation("Dissipation", Float) = 1
-
 	}
 
 	SubShader
@@ -38,9 +36,6 @@
 			// 纹素大小
 			float4 _VelocityTex_TexelSize;
 
-			// 衰减系数
-			uniform float _Dissipation;
-
 			v2f vert(appdata v)
 			{
 				v2f o;
@@ -55,10 +50,6 @@
 				//平流公式：q(x, t+dt) = q(x - u(x,t)*dt, t)
 				float2 coord = uv - unity_DeltaTime.z * tex2D(_VelocityTex, uv).xy * _VelocityTex_TexelSize;
 				float4 result = tex2D(_PhysicTex, coord);
-
-				// 对物理量做一定的衰弱
-				float decay = 1.0 + _Dissipation * unity_DeltaTime.x;
-				//result = result / decay;
 
 				return result;
 			}
