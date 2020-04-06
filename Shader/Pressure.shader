@@ -52,7 +52,7 @@
 
 
 
-		Pass//pressure 5 通过散度求当前压强，压强有消耗
+		Pass//pressure  通过散度求当前压强
 		{
 			CGPROGRAM
 			#pragma vertex vert
