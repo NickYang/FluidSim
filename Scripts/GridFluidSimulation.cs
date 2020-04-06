@@ -17,8 +17,7 @@ public class GridFluidSimulation : MonoBehaviour
 
     public int SIM_RES = 32;//由于模拟的RT分辨率
     public int DISPLAY_RES = 1024;//用于显示的RT分辨率
-    //public float DENSITY_DISSIPATION = 0.0f;//1.0f;
-    //public float VELOCITY_DISSIPATION = 0.0f;//0.2f;
+
     public float PRESSURE = 0.8f;
     public int VISCOUS_ITERATIONS = 5;
     public int PRESSURE_ITERATIONS = 20;
