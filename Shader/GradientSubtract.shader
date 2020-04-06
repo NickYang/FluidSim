@@ -8,8 +8,6 @@
 	}
 		SubShader
 	{
-		Tags { "RenderType" = "Opaque" }
-		LOD 100
 		CGINCLUDE
 
 		struct appdata
