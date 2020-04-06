@@ -7,7 +7,6 @@
 	}
 	SubShader
 	{
-		Tags { "RenderType" = "Opaque" }
 		CGINCLUDE
 
 		struct appdata
