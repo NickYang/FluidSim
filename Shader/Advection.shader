@@ -57,8 +57,8 @@
 				float4 result = tex2D(_PhysicTex, coord);
 
 				// 对物理量做一定的衰弱
-				float decay = 1.0 + _Dissipation * unity_DeltaTime.x;
-				//result = result / decay;
+				float decay = 1.0 + _Dissipation * unity_DeltaTime.z;
+				result = result / decay;
 
 				return result;
 			}

@@ -133,6 +133,9 @@ GameObject:
   - component: {fileID: 56845547}
   - component: {fileID: 56845546}
   - component: {fileID: 56845549}
+  - component: {fileID: 56845550}
+  - component: {fileID: 56845552}
+  - component: {fileID: 56845551}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -198,8 +201,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 56845545}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.000019430136, y: 0.99997056, z: 0.007190261, w: -0.0026988816}
+  m_LocalPosition: {x: -0.012501238, y: -0.011985208, z: 0.8333176}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -217,13 +220,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8145bcf16846e7f4a9c985368e24328e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SIM_RES: 32
-  DISPLAY_RES: 1024
+  SIM_RES: 128
+  DISPLAY_RES: 128
   PRESSURE: 0.8
   VISCOUS_ITERATIONS: 5
   PRESSURE_ITERATIONS: 20
-  VISCOUS: 0.0001
+  VISCOUS: 0
   bReplay: 0
+  CURL: 30
+  COLOR_UPDATE_SCALE: 0.1
+  FLOW_RADIUS: 0.001
+  VELOCITY_DISSIPATOIN: 1
+  COLOR_DISSIPATOIN: 0.2
+  BLOOM_RESOLUTION: 256
+  BLOOM_THRESHOLD: 0.6
+  BLOOM_SOFT_KNEE: 0.7
+  BLOOM_ITERATIONS: 8
+  BLOOM_INTENSITY: 0.8
   circlepaintMaterial: {fileID: 2100000, guid: 51f6e49c9df324dec8ceb1f75e7a7e4c, type: 2}
   advectionMaterial: {fileID: 2100000, guid: fd9a0551d0a7e2b4abebd6714bca798b, type: 2}
   divergenceMaterial: {fileID: 2100000, guid: 16f91ca06a5a516469f18c601479ab24, type: 2}
@@ -232,6 +245,82 @@ MonoBehaviour:
   origPressureMaterial: {fileID: 2100000, guid: 6f211a8208bed3f4390929b7d25a1f7c,
     type: 2}
   diffusionMaterial: {fileID: 2100000, guid: 17d666c9b17d4d543a5ca5de0a366550, type: 2}
+  curlMaterial: {fileID: 2100000, guid: 0a6cb1a6418ee8043ba0046aead05fc4, type: 2}
+  vorticityMaterial: {fileID: 2100000, guid: acd5a11e3437db74fa04c8ff7129d77c, type: 2}
+  displayMat: {fileID: 2100000, guid: 7e202119090f5f3439cbfef4686bc8ae, type: 2}
+  bloomMat: {fileID: 2100000, guid: b3647dffdb246f44a92a450ba7d58e66, type: 2}
+--- !u!114 &56845550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56845545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3419d466f0ffe344b04d187448ddda2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &56845551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56845545}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 865e80f4b56e37e4a985622a8522ce80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SIM_RESOLUTION: 128
+  DYE_RESOLUTION: 512
+  DENSITY_DISSIPATION: 1
+  VELOCITY_DISSIPATION: 0.2
+  PRESSURE: 0.8
+  PRESSURE_ITERATIONS: 20
+  CURLCC: 30
+  FLOW_RADIUS: 0.0025
+  SHADING: 1
+  COLORFUL: 1
+  COLOR_UPDATE_SPEED: 10
+  PAUSED: 0
+  BACK_COLOR: {x: 0, y: 0, z: 0}
+  TRANSPARENT: 0
+  BLOOM: 0
+  BLOOM_ITERATIONS: 8
+  BLOOM_RESOLUTION: 256
+  BLOOM_INTENSITY: 0.8
+  BLOOM_THRESHOLD: 0.6
+  BLOOM_SOFT_KNEE: 0.7
+  SUNRAYS: 0
+  SUNRAYS_RESOLUTION: 196
+  SUNRAYS_WEIGHT: 1
+  displayMaterial: {fileID: 2100000, guid: cee846efdb0b5c64795ad64fa53c02cc, type: 2}
+  displayOnlyMaterial: {fileID: 2100000, guid: 1692f7a09d00c674a9e3d7c26ea3a10d, type: 2}
+  splatMaterial: {fileID: 2100000, guid: d009589b4fbf29543a10ccd704f2cfa3, type: 2}
+  curlMaterial: {fileID: 2100000, guid: b1dbb7688af618845a287908f10e7120, type: 2}
+  velocityMaterial: {fileID: 2100000, guid: f36b483443188a2478a6d1cef4a05c43, type: 2}
+  divergenceMaterial: {fileID: 2100000, guid: c9bb5c120a2250c45b161bbd427ff102, type: 2}
+  pressureMaterial: {fileID: 2100000, guid: addf57614b5ccf449b2c8a82dc7192fe, type: 2}
+  gradientMaterial: {fileID: 2100000, guid: f007a9618b3320742be792d77168e166, type: 2}
+  clearMaterial: {fileID: 2100000, guid: c47ebde1004809841a505dd9ffd11dbc, type: 2}
+  advectionMaterial: {fileID: 2100000, guid: 02f79feccd9b64042967948738a11d5d, type: 2}
+  useDisplayMat: 0
+  bRestart: 0
+  bCaptureRenderTexture: 1
+--- !u!114 &56845552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56845545}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 283af43f9589249449738ca77db25a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1090504828
 GameObject:
   m_ObjectHideFlags: 0
