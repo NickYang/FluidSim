@@ -102,7 +102,7 @@ public class GridFluidSimulation : MonoBehaviour
         return delta;
     }
 
-    static Vector2 getCorrectResolution(float resolution)
+    static Vector2 CorrectResolution(float resolution)
     {
         float aspectRatio = (float)Screen.width / Screen.height;
         if (aspectRatio < 1)
@@ -119,9 +119,12 @@ public class GridFluidSimulation : MonoBehaviour
 
     void InitRenderBuffers()
     {
+
         // 算出实际分辨率
-        Vector2 simCorrectResolution = getCorrectResolution(SIM_RES);
-        Vector2 disCorrectResolution = getCorrectResolution(DISPLAY_RES);
+
+        Vector2 simCorrectResolution = CorrectResolution(SIM_RES);
+        Vector2 disCorrectResolution = CorrectResolution(DISPLAY_RES);
+
         
         velocityRT0 = RenderTexture.GetTemporary((int)simCorrectResolution.x, (int)simCorrectResolution.y, 0, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear);
         velocityRT0.name = "velocityRT0";

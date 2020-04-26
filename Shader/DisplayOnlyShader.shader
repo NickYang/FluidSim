@@ -75,7 +75,7 @@
 				c *= diffuse;
 
 			
-				float4 col = float4(cr.rgb, 1.0);
+				float4 col = float4(c.rgb, 1.0);
 				return col;
 			}
 			ENDCG
