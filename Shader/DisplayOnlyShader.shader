@@ -3,11 +3,11 @@
 	Properties
 	{
 		_MainTex("MainTex", 2D) = "black" {}
+		_SecondTex("SecondTex", 2D) = "black" {}
+
 	}
 	SubShader
 	{
-		Tags { "RenderType" = "Opaque" }
-		LOD 100
 		CGINCLUDE
 
 		struct appdata
@@ -18,9 +18,9 @@
 
 		struct v2f
 		{
-			float2 vUv : TEXCOORD0;
-			float4 vLR : TEXCOORD1;
-			float4 vTB:  TEXCOORD2;
+			float2 uv : TEXCOORD0;
+			float4 lr : TEXCOORD1;
+			float4 tb:  TEXCOORD2;
 			float4 vertex : SV_POSITION;
 		};
 
@@ -32,19 +32,16 @@
 		{
 			v2f o;
 
-			o.vUv = v.uv;
-			o.vLR.xy = o.vUv - float2(_MainTex_TexelSize.x, 0.0);
-			o.vLR.zw = o.vUv + float2(_MainTex_TexelSize.x, 0.0);
-			o.vTB.xy = o.vUv + float2(0.0, _MainTex_TexelSize.y);
-			o.vTB.zw = o.vUv - float2(0.0, _MainTex_TexelSize.y);
+			o.uv = v.uv;
+			o.lr.xy = o.uv - float2(_MainTex_TexelSize.x, 0.0);
+			o.lr.zw = o.uv + float2(_MainTex_TexelSize.x, 0.0);
+			o.tb.xy = o.uv + float2(0.0, _MainTex_TexelSize.y);
+			o.tb.zw = o.uv - float2(0.0, _MainTex_TexelSize.y);
 			o.vertex = UnityObjectToClipPos(v.vertex.xyz);
 
 			return o;
 		}
-		float3 linearToGamma(float3 color) {
-			color = max(color, float3(0,0,0));
-			return max(1.055 * pow(color, 0.416666667) - 0.055, 0);
-		}
+
 
 		ENDCG
 		Pass
@@ -53,30 +50,30 @@
 			#pragma vertex vert
 			#pragma fragment frag 
 
-			#pragma multi_compile SHADING
-
-			#pragma multi_compile BLOOM
-
-			#include "UnityCG.cginc"
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				float3 c = tex2D(_MainTex, i.vUv).rgb;
+				float2 uv = i.uv;
 
-				float3 lc = tex2D(_MainTex, i.vLR.xy).rgb;
-				float3 rc = tex2D(_MainTex, i.vLR.zw).rgb;
-				float3 tc = tex2D(_MainTex, i.vTB.xy).rgb;
-				float3 bc = tex2D(_MainTex, i.vTB.zw).rgb;
+				float3 c = tex2D(_MainTex, i.uv).rgb;
+
+				float3 lc = tex2D(_MainTex, i.lr.xy).rgb;
+				float3 rc = tex2D(_MainTex, i.lr.zw).rgb;
+				float3 tc = tex2D(_MainTex, i.tb.xy).rgb;
+				float3 bc = tex2D(_MainTex, i.tb.zw).rgb;
 				float dx = length(rc) - length(lc);
 				float dy = length(tc) - length(bc);
 				float3 n = normalize(float3(dx, dy, length(_MainTex_TexelSize.xy)));
 				float3 l = float3(0.0, 0.0, 1.0);
 				float diffuse = clamp(dot(n, l) + 0.7, 0.7, 1.0);
-				c *= diffuse;
-
 			
-				float4 col = float4(c.rgb, 1.0);
-				return col;
+				float3 rd = normalize(float3(uv, 1.));
+				float spec =pow(max(dot(reflect(-n, l), -rd), 0.), 12.);
+
+				c = (c.rgb *(diffuse*float3(1, .97, .92)*2. + 0.5) + float3(1., .6, .2)*spec*600);
+
+				return float4(sqrt(clamp(c.rgb, 0., 1.)), 1.);
+
 			}
 			ENDCG
 		}

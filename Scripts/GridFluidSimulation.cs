@@ -30,6 +30,7 @@ public class GridFluidSimulation : MonoBehaviour
     public float FLOW_RADIUS = 0.001f;
     public float VELOCITY_DISSIPATOIN = 1f;
     public float COLOR_DISSIPATOIN = 0.2f;
+    public bool LIGHTING = false;
 
     public Material circlepaintMaterial;
     public Material advectionMaterial;
@@ -41,23 +42,21 @@ public class GridFluidSimulation : MonoBehaviour
     public Material curlMaterial;
     public Material vorticityMaterial;
     public Material displayMat;
-    public static List<FlowPointer> pointers = new List<FlowPointer>();
+    
     public float colorUpdateInterval =0.25f        ;
 
     float colorUpdateTimer = 0.0f;
     float baseVeclocity = 1000f;
-
-    static public void AddPointer(int id, float texcoordX, float texcoordY)
+    static FlowPointer pointer;
+    static public void resetPointer(float texcoordX, float texcoordY)
     {
         Color color = RandomColor();
-        FlowPointer point = new FlowPointer(id, texcoordX, texcoordY, color);
-        pointers.Add(point);
+        pointer.ResetPointer(texcoordX, texcoordY, color);       
     }
 
-    static public void UpdatePointer(int id, float texcoordX, float texcoordY)
+    static public void UpdatePointer(float texcoordX, float texcoordY)
     {
-        FlowPointer p = pointers[0];
-        p.UpdatePointer(id, texcoordX, texcoordY);
+        pointer.UpdatePointer(texcoordX, texcoordY);
     }
 
     static Color HSVtoRGB(float h, float s, float v)
@@ -165,7 +164,7 @@ public class GridFluidSimulation : MonoBehaviour
         curlRT.name = "curlRT";
         curlRT.filterMode = FilterMode.Point;
         curlRT.wrapMode = TextureWrapMode.Clamp;
-
+       
     }
 
     void SwapRenderTexture(ref RenderTexture rt1, ref RenderTexture rt2)
@@ -240,6 +239,7 @@ public class GridFluidSimulation : MonoBehaviour
     {
         InitRenderBuffers();
         CreateDyes((int)Random.Range(10.0f, 20.0f));
+        pointer = new FlowPointer();
     }
 
     void ReleaseAllRT()
@@ -341,13 +341,11 @@ public class GridFluidSimulation : MonoBehaviour
     }
 
     void SimulateTouch()
-    {
-        if (pointers.Count <= 0) return;
-        FlowPointer p = pointers[0];
-        if (p.moved)
+    {  
+        if (pointer.moved)
         {
-            p.moved = false;
-            TouchDye(p);
+            pointer.moved = false;
+            TouchDye(pointer);
         }
     }
 
@@ -356,10 +354,7 @@ public class GridFluidSimulation : MonoBehaviour
         colorUpdateTimer += Time.deltaTime;
         if (colorUpdateTimer >= colorUpdateInterval)
         {
-            if (pointers.Count <= 0) return;
-
-            FlowPointer p = pointers[0];
-            p.color = RandomColor();
+            pointer.color = RandomColor();
             colorUpdateTimer = colorUpdateTimer - colorUpdateInterval;
         }
     }
